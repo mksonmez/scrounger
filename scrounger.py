@@ -41,6 +41,12 @@ def text_query_to_csv(text_query,count):
         print('failed on_status,',str(e))
         time.sleep(3)
 
+all_tweets = api.user_timeline(screen_name=user, count=200,
+include_rts=False, exclude_replies=True)
+
+last_tweet_id = all_tweets[-1].id
+
+
 # options
 username = input('Enter twitter handler: ')
 count = int(input('Enter a number to scrape: '))
