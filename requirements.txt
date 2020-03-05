@@ -1,4 +1,4 @@
 tweepy
 pandas
-time
-json
+wget
+request
