@@ -5,7 +5,7 @@ import time as timeto
 import json
 import pandas as pd
 
-with open('twit_cred.json') as cred_data:
+with open('./creds/twit_cred.json') as cred_data:
 	info = json.load(cred_data)
 	consumer_key = info['CONSUMER_KEY']
 	consumer_secret = info['CONSUMER_SECRET']
