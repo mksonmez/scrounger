@@ -134,5 +134,4 @@ twit_cred.json
 # vs studio
 .vs
 .DS_Store
-media/
-media/images/
+/media/images/
