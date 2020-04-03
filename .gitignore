@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 # credentials
-twit_cred.json
+/creds/*
 
 # vs studio
 .vs

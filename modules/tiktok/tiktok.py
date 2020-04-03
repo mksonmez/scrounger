@@ -16,7 +16,7 @@ def get_chromedriver(driver_location, show_browser=False, has_driver=False):
   else:
     return webdriver.Chrome(driver_location, options=chrome_options)
 
-def main(driver_location="./chromedriver", driver=None, has_driver=False):
+def main(driver_location="/usr/bin/chromedriver", driver=None, has_driver=False):
   parser = argparse.ArgumentParser()
   parser.add_argument("username", help="The TikTok username", type=str)
   parser.add_argument("--driver", help="Driver location", type=str)
