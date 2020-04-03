@@ -30,7 +30,12 @@ oauth = OAuth1(client_key,client_secret,token,token_secret)
 
 username           = sys.argv[1]
 
-desktop_directory  = "%s/Social/twitter/Exporter/" % os.path.expanduser("~")
+try:
+    os.mkdir("%s/Desktop/" % (lol_directory) % os.path.expanduser("~"))
+except:
+    pass
+
+desktop_directory  = "%s/Desktop/" % os.path.expanduser("~")
 
 try:
     os.mkdir("%s%s" % (desktop_directory,username))
