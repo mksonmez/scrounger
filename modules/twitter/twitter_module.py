@@ -1,3 +1,4 @@
+#!/usr/bin/env python2.7
 import requests
 import json
 import time
@@ -6,6 +7,7 @@ import sys
 import codecs
 
 from requests_oauthlib import OAuth1
+
 '''
 # authentication pieces
 client_key    = "14RdwJwcED1RkanxC5QdLLgeF"
@@ -16,8 +18,8 @@ token_secret  = "CeM8uEWVa8J9Iq0esKaoNab51Vhy9KUSmj1QFXz6iaQ5G"
 
 # our credentials
 token         = "448470431-yVzAQ2HB8bGHIrrtgUmX4iQtac68bOYatfZMEF0k"
-token_secret  = "Oa2NZlBA46s3Srd5QJIT6wtB7qc2dK071IXi86thdRhsV",
-client_key    = "YkHusbH1no5DlFspTQOrL26hC",
+token_secret  = "Oa2NZlBA46s3Srd5QJIT6wtB7qc2dK071IXi86thdRhsV"
+client_key    = "YkHusbH1no5DlFspTQOrL26hC"
 client_secret = "8UpH1ZXohNEwCNNCbSUpWlf9LqZVoDE3Ug6F7bp7BC1Y1KtREu"
 
 # the base for all Twitter calls
