@@ -128,11 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# credentials
-/creds/*
-
-# vs studio
+# Custom dir
 .vs
 .vscode
 .DS_Store
-/media/images/

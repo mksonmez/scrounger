@@ -5,6 +5,7 @@ import sys
 import argparse
 import json
 import os
+import urllib3
 
 from bs4 import BeautifulSoup
 from useragents import *
@@ -47,13 +48,6 @@ class TiktokScraper:
 		with open(f"{self.username}.jpg","wb") as f:
 			f.write(r.content)
 
-	# videos won't work because jsx 
-	def download_video(self):
-
-		r = requests.get(self.data[''])
-		with open(f"{self.username}.mp4","wb") as f:
-			f.write(r.content)
-
 	def save_data(self):
 
 		with open(f'{self.username}_profile_data.json','w') as f:
@@ -91,7 +85,6 @@ def main():
 	if args.download == True:
 		tiktok = TiktokScraper(args.username[0])
 		tiktok.download_picture()
-		#tiktok.download_video()
 	else:
 		tiktok = TiktokScraper(args.username[0])
 
