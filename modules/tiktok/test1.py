@@ -4,6 +4,10 @@ import json
 import os
 import time
 
+def create_folder_if_not_exist(folder):
+  if not os.path.exists(folder):
+    os.makedirs(folder)
+
 def get_user_info(self, name):
     url = 'https://www.tiktok.com/@' + name
     jsoned = ''

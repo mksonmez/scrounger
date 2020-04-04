@@ -1,91 +1,101 @@
-from time import sleep
-import csv
-import urllib.request
+#! /usr/bin/env python3
+import random
+import requests
+import sys
 import argparse
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
+import json
+import os
 
-def get_chromedriver(driver_location, show_browser=False, has_driver=False):
-  from selenium.webdriver.chrome.options import Options
-  chrome_options = Options()
-  if not show_browser:
-    chrome_options.add_argument("--headless")
-  if has_driver:
-    return webdriver.Chrome(options=chrome_options)
-  else:
-    return webdriver.Chrome(driver_location, options=chrome_options)
+from bs4 import BeautifulSoup
+from useragents import *
 
-def main(driver_location="/usr/bin/chromedriver", driver=None, has_driver=False):
-  parser = argparse.ArgumentParser()
-  parser.add_argument("username", help="The TikTok username", type=str)
-  parser.add_argument("--driver", help="Driver location", type=str)
-  parser.add_argument("--driver-type", help="Type of driver (i.e. Chrome)", type=str)
-  parser.add_argument("--show-browser", help="Shows browser while scraping. Useful for debugging", action="store_true")
-  parser.add_argument("--delay", type=int, help="Number of seconds to delay between video downloading", default=0)
-  parser.add_argument("--location", help="Location to store the files")
+class TiktokScraper:
 
-  args = parser.parse_args()
+	def __init__(self, username):
+		if username.startswith('@'):
+			self.username = username
+		else:
+			self.username = f'@{username}'
+		
+		self.create_dir()
+		self.data = self.scrape_profile()
+		self.save_data()
+		self.print_data()
 
-  if not args.driver:
-    if not os.path.isfile(driver_location):
-      try:
-        webdriver.Chrome()
-        has_driver = True
-      except:
-        import AutoChromedriver
-        AutoChromedriver.download_chromedriver()
-  else:
-    driver_location = args.driver
+	def scrape_profile(self):
 
-  if not args.driver_type:
-    driver = get_chromedriver(driver_location, show_browser=args.show_browser, has_driver=has_driver)
-  else:
-    if args.driver_type.lower() == 'chrome':
-      driver = get_chromedriver(driver_location, show_browser=args.show_browser, has_driver=has_driver)
-    if args.driver_type.lower() == 'firefox':
-      driver = webdriver.Firefox()
+		r = requests.get(f'http://tiktok.com/{self.username}', headers={'User-Agent':random.choice(user_agents)})
+		soup = BeautifulSoup(r.text, "html.parser")
+		content = soup.find_all("script", attrs={"type":"application/json", "crossorigin":"anonymous"})
+		content = json.loads(content[0].contents[0])
+		profile_data = {"UserID":content["props"]["pageProps"]["userData"]["userId"],
+			"username":content["props"]["pageProps"]["userData"]["uniqueId"],
+			"nickName":content["props"]["pageProps"]["userData"]["nickName"],
+			"bio":content["props"]["pageProps"]["userData"]["signature"],
+			"profileImage":content["props"]["pageProps"]["userData"]["coversMedium"][0],
+			"profileVideo":content["props"]["pageProps"]["userData"]["coversMedium"][0],
+			"following":content["props"]["pageProps"]["userData"]["following"],
+			"fans":content["props"]["pageProps"]["userData"]["fans"],
+			"hearts":content["props"]["pageProps"]["userData"]["heart"],
+			"videos":content["props"]["pageProps"]["userData"]["video"],
+			"verified":content["props"]["pageProps"]["userData"]["verified"]}
 
-  scraper.start(driver, args.username, folder=args.location, delay=args.delay)
-        
-username = input("Enter username : ") 
-url = 'https://www.tiktok.com/@{}?langCountry=en'.format(username)
-sleep(3) # let it load first
+		return profile_data
+
+	def download_picture(self):
+
+		r = requests.get(self.data['profileImage'])
+		with open(f"{self.username}.jpg","wb") as f:
+			f.write(r.content)
+
+	# videos won't work because jsx 
+	def download_video(self):
+
+		r = requests.get(self.data['profileVideo'])
+		with open(f"{self.username}.mp4","wb") as f:
+			f.write(r.content)
+
+	def save_data(self):
+
+		with open(f'{self.username}_profile_data.json','w') as f:
+			f.write(json.dumps(self.data))
+		print(f"Profile data saved to {os.getcwd()}")
 
 
-def create_folder_if_not_exist(folder):
-  if not os.path.exists(folder):
-    os.makedirs(folder)
+	def create_dir(self):
+		i = 0
+		while True:
+			try:
+				os.mkdir(self.username + str(i))
+				os.chdir(self.username + str(i))
+				break
+			except FileExistsError:
+				i += 1
 
-def scrape_video(driver, folder="./"):
-  url = driver.find_element_by_tag_name("video").get_attribute("src")
-  name = "".join(url.split("/")[3:5])
-  name = os.path.join(folder, name)
-  downloader.download_mp4(name, url)
-  ScrapeUtils.click_corner(driver)
+	def print_data(self):
 
-def start(driver, username, folder=None, delay=1):
-  if folder is None:
-    folder = f"./{username}"
-    create_folder_if_not_exist(folder)
+		for key, value in self.data.items():
+			print(f"{key.upper()}: {value}")
 
-  url = f"https://www.tiktok.com/@{username}"
-  driver.get(url)
-  if not Wait(driver).for_class_name("video-feed"):
-    raise Exception(f"Can't load {url}")
+#
+# Argument selection
+#
 
-  print("Getting all videos...")
-  ScrapeUtils.scroll_bottom(driver)
+def arg_parse():
+	parser = argparse.ArgumentParser(description="TikTok Scraper")
+	parser.add_argument("--username", help="Profile Username", required=True, nargs=1)
+	parser.add_argument("--download", help="Downloads the user data", required=False, action='store_true')
+	return parser.parse_args()
 
-  main_elem = driver.find_element_by_tag_name("main")
-  print("Preparing to download")
-  for link in tqdm(main_elem.find_elements_by_tag_name("a"), desc=f"Downloading videos to {folder}"):
-    try:
-      link.click()
-    except ElementClickInterceptedException:
-      print("clicked")
-    except:
-      print("failed")
-    else:
-      scrape_video(driver, folder=folder)
-    time.sleep(delay)
+def main():
+	args = arg_parse()
+	if args.download == True:
+		tiktok = TiktokScraper(args.username[0])
+		tiktok.download_picture()
+		tiktok.download_video()
+	else:
+		tiktok = TiktokScraper(args.username[0])
+
+
+if __name__ == "__main__":
+	main()
