@@ -33,7 +33,6 @@ class TiktokScraper:
 			"nickName":content["props"]["pageProps"]["userData"]["nickName"],
 			"bio":content["props"]["pageProps"]["userData"]["signature"],
 			"profileImage":content["props"]["pageProps"]["userData"]["coversMedium"][0],
-			"profileVideo":content["props"]["pageProps"]["userData"]["coversMedium"][0],
 			"following":content["props"]["pageProps"]["userData"]["following"],
 			"fans":content["props"]["pageProps"]["userData"]["fans"],
 			"hearts":content["props"]["pageProps"]["userData"]["heart"],
@@ -51,7 +50,7 @@ class TiktokScraper:
 	# videos won't work because jsx 
 	def download_video(self):
 
-		r = requests.get(self.data['profileVideo'])
+		r = requests.get(self.data[''])
 		with open(f"{self.username}.mp4","wb") as f:
 			f.write(r.content)
 
@@ -92,7 +91,7 @@ def main():
 	if args.download == True:
 		tiktok = TiktokScraper(args.username[0])
 		tiktok.download_picture()
-		tiktok.download_video()
+		#tiktok.download_video()
 	else:
 		tiktok = TiktokScraper(args.username[0])
 
