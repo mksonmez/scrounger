@@ -558,13 +558,7 @@ def login(email, password):
             chromedriver_versions = {
                 "linux": os.path.join(
                     os.getcwd(), "/usr/bin/", "chromedriver",
-                ),
-                "darwin": os.path.join(
-                    os.getcwd(), CHROMEDRIVER_BINARIES_FOLDER, "chromedriver_mac64",
-                ),
-                "windows": os.path.join(
-                    os.getcwd(), CHROMEDRIVER_BINARIES_FOLDER, "chromedriver_win32.exe",
-                ),
+                )
             }
 
             driver = webdriver.Chrome(
