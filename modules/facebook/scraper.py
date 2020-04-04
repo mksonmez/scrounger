@@ -15,7 +15,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-direct = "/~/home/mint/Documents/Ultimate-Facebook-Scraper"
 
 def get_facebook_images_url(img_links):
     urls = []
