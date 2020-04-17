@@ -3,7 +3,7 @@ import random
 
 from useragents import *
 
-url = 'https://www.tiktok.com/@willsmith?lang=en'
+url = 'https://www.tiktok.com/@willsmith/video'
 
 browser = mechanicalsoup.StatefulBrowser(
     soup_config={'features': 'lxml'},
