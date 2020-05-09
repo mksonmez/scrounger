@@ -3,6 +3,8 @@
 value= default
 handler= default
 
+cat ./banner
+
 get_handler() {
     echo "You have chose Twitter Module, please input a handler"
     read handler
@@ -22,7 +24,8 @@ run_tik() {
     read handler
 }
 
-echo "please input one of the following values"
+echo " "
+echo "Please input one of the following values"
 echo "Twitter = t"
 echo "Facebook = f"
 echo "Tik Tok = k"
