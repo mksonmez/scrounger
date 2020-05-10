@@ -12,9 +12,9 @@ get_handler() {
 
 run_fb() {
     echo "You have selected the Facebook module"
-    echo "Please give us the person's facebook link that you want to search"
+    echo "Please give us the person's facebook handler that you want to search"
     read handler
-    echo $handler > ./modules/facebook/input.txt
+    echo "https://www.facebook.com/$handler" > ./modules/facebook/input.txt
 
 }
 
