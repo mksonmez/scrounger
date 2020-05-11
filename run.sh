@@ -28,9 +28,17 @@ echo " "
 echo "Please input one of the following values"
 echo "Twitter = t"
 echo "Facebook = f"
-echo "Tik Tok = k"
+echo "Tik Tok = c"
+
+#OSINT_OUTPUT= "~/Desktop/OSINT_OUTPUT"
+
+mkdir -p "/home/osint/Desktop/OSINT_OUTPUT/"
+mkdir -p "/home/osint/Desktop/OSINT_OUTPUT/Twitter"
+mkdir -p "/home/osint/Desktop/OSINT_OUTPUT/Facebook"
+mkdir -p "/home/osint/Desktop/OSINT_OUTPUT/TikTok"
 
 read value
+
 
 case $value in
 t)
@@ -44,7 +52,7 @@ f)
     $(cd /home/osint/Desktop/workstation/scrounger/modules/facebook && python3.7 scraper.py)
     exit 0
     ;;
-k)
+c)
     run_tik
     python3.7 ./modules/tiktok/tiktok_module.py --username $handler --download
     exit 0
