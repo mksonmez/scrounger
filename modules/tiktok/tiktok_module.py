@@ -56,14 +56,11 @@ class TiktokScraper:
 
 
 	def create_dir(self):
-		i = 0
 		while True:
-			try:
-				os.mkdir(self.username + str(i))
-				os.chdir(self.username + str(i))
-				break
-			except FileExistsError:
-				i += 1
+			os.mkdir(self.username)
+			os.chdir(self.username)
+			break
+
 
 	def print_data(self):
 
