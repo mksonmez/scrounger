@@ -5,6 +5,9 @@ handler= default
 
 cat ./banner
 
+###-------------------------------------------------------###
+### Gets the Handlers for the various social media sights ###
+###-------------------------------------------------------###
 get_handler() {
     echo "You have chose Twitter Module, please input a handler"
     read handler
@@ -30,13 +33,20 @@ echo "Twitter = t"
 echo "Facebook = f"
 echo "Tik Tok = c"
 
-#OSINT_OUTPUT= "~/Desktop/OSINT_OUTPUT"
 
+###-------------------------------------------------------###
+###    Checks to make sure all the output directories are ###
+###       created, if they aren't it will make them       ### 
+###-------------------------------------------------------###
 mkdir -p "/home/osint/Desktop/OSINT_OUTPUT/"
 mkdir -p "/home/osint/Desktop/OSINT_OUTPUT/Twitter"
 mkdir -p "/home/osint/Desktop/OSINT_OUTPUT/Facebook"
 mkdir -p "/home/osint/Desktop/OSINT_OUTPUT/TikTok"
 
+
+###-------------------------------------------------------###
+###    Decides which social media module will be opened   ###
+###-------------------------------------------------------###
 read value
 
 
@@ -48,8 +58,11 @@ t)
     ;;
 f)
     run_fb
-    #python3.7 ./modules/facebook/scraper.py
     $(cd /home/osint/Desktop/workstation/scrounger/modules/facebook && python3.7 scraper.py)
+    wait
+    $(cd /home/osint/Desktop/workstation/scrounger/modules/facebook && cp -R data/. "/home/osint/Desktop/OSINT_OUTPUT/Facebook")
+    wait
+    $(cd /home/osint/Desktop/workstation/scrounger/modules/facebook/data && rm -rf *)
     exit 0
     ;;
 c)
