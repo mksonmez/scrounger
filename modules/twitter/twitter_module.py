@@ -30,19 +30,19 @@ oauth = OAuth1(client_key,client_secret,token,token_secret)
 
 username           = sys.argv[1] # enter handler
 
-desktop_directory  = "%s/Desktop/" % os.path.expanduser("~")
+output_directory  = "%s/Desktop/OSINT_OUTPUT/Twitter/" % os.path.expanduser("~")
 
 try:
-    os.mkdir("%s%s" % (desktop_directory,username))
+    os.mkdir("%s%s" % (output_directory,username))
 except:
     pass
 
 try:
-    os.mkdir("%s%s/photos" % (desktop_directory,username))
+    os.mkdir("%s%s/photos" % (output_directory,username))
 except:
     pass
 
-log = codecs.open("%s%s/twitter.csv" % (desktop_directory,username),"wb",encoding="utf-8")
+log = codecs.open("%s%s/twitter.csv" % (output_directory,username),"wb",encoding="utf-8")
 log.write("#,Created Timestamp, Text, Longitude, Latitude\r\n")
 
 #
@@ -204,7 +204,7 @@ if full_tweet_list is not None:
     
                         file_name = media['media_url'].split("/")[-1]
                         
-                        fd = open("%s%s/photos/%s" % (desktop_directory,username,file_name),"wb")
+                        fd = open("%s%s/photos/%s" % (output_directory,username,file_name),"wb")
                         fd.write(response.content)
                         fd.close()  
         
@@ -250,7 +250,7 @@ while count < len(friends):
     final_friends.extend(get_usernames(",".join(friends_snippet)))
     count += 100
     
-fd = codecs.open("%s%s/friends.csv" % (desktop_directory,username),"wb",encoding="utf-8")
+fd = codecs.open("%s%s/friends.csv" % (output_directory,username),"wb",encoding="utf-8")
 fd.write("\r\n".join(final_friends))
 fd.close()
 
@@ -273,7 +273,7 @@ while count < len(followers):
     final_followers.extend(get_usernames(",".join(followers_snippet)))
     count += 100
 
-fd = codecs.open("%s%s/followers.csv" % (desktop_directory,username),"wb",encoding="utf-8")
+fd = codecs.open("%s%s/followers.csv" % (output_directory,username),"wb",encoding="utf-8")
 fd.write("\r\n".join(final_followers))
 fd.close()
 
