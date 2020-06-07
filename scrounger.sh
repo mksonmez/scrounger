@@ -31,8 +31,8 @@ echo " "
 echo "Please input one of the following values"
 echo "Twitter = t"
 echo "Facebook = f"
-echo "Tik Tok = c" ### tiktok info collecttor 
-# tiktok video donwloader
+echo "Tik Tok (User Info) = c"
+echo "Tik Tok (Download Video) = cd" 
 
 
 ###-------------------------------------------------------###
@@ -67,12 +67,21 @@ f)
     exit 0
     ;;
 c)
+    mkdir -p "/home/osint/Desktop/OSINT_OUTPUT/TikTok/UserProfiles"
     run_tiktok
-    python3.7 ./modules/tiktok/run.py
+    python3.7 ./modules/tiktok_user_info/tiktok_module.py --username "$handler"
     wait
-    cp -R "@$handler" "/home/osint/Desktop/OSINT_OUTPUT/TikTok"
+    cp -R "@$handler" "/home/osint/Desktop/OSINT_OUTPUT/TikTok/UserProfiles"
     wait
     rm -rf "@$handler"
+    exit 0
+    ;;
+cd)
+    python3.7 ./modules/tiktok/run.py
+    wait
+    cp -R "videos/" "/home/osint/Desktop/OSINT_OUTPUT/TikTok"
+    wait
+    rm -rf "videos/"
     exit 0
     ;;
 *)
