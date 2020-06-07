@@ -31,7 +31,8 @@ echo " "
 echo "Please input one of the following values"
 echo "Twitter = t"
 echo "Facebook = f"
-echo "Tik Tok = c"
+echo "Tik Tok = c" ### tiktok info collecttor 
+# tiktok video donwloader
 
 
 ###-------------------------------------------------------###
@@ -58,16 +59,16 @@ t)
     ;;
 f)
     run_fb
-    $(cd /home/osint/Desktop/workstation/scrounger/modules/facebook && python3.7 scraper.py)
+    $(cd /home/osint/Desktop/scrounger/modules/facebook && python3.7 scraper.py)
     wait
-    $(cd /home/osint/Desktop/workstation/scrounger/modules/facebook && cp -R data/. "/home/osint/Desktop/OSINT_OUTPUT/Facebook")
+    $(cd /home/osint/Desktop/scrounger/modules/facebook && cp -R data/. "/home/osint/Desktop/OSINT_OUTPUT/Facebook")
     wait
-    $(cd /home/osint/Desktop/workstation/scrounger/modules/facebook/data && rm -rf *)
+    $(cd /home/osint/Desktop/scrounger/modules/facebook/data && rm -rf *)
     exit 0
     ;;
 c)
     run_tiktok
-    python3.7 ./modules/tiktok/tiktok_module.py --username $handler --download
+    python3.7 ./modules/tiktok/run.py
     wait
     cp -R "@$handler" "/home/osint/Desktop/OSINT_OUTPUT/TikTok"
     wait
