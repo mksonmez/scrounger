@@ -3,6 +3,7 @@
 value="default"
 handler="default"
 DONE="false"
+DIR_LOC=$(pwd)
 
 cat ./banner
 
@@ -28,29 +29,45 @@ run_tiktok() {
     read handler
 }
 
+set_fb_pass() {
+    if test -f "modules/facebook/credentials.yaml"; then
+        rm "modules/facebook/credentials.yaml"
+    fi
+    echo "Enter your Facebook Email"
+    read -p "Email: " handler
+    echo "email: $handler" >> "modules/facebook/credentials.yaml"
+    echo "Enter your Facebook Password"
+    read -p "Password: " handler
+    echo "password: $handler" >> "modules/facebook/credentials.yaml"
+}
+
 read_choices() {
     echo " "
     echo "Please input one of the following values"
     echo "Twitter = t"
     echo "Facebook = f"
     echo "Tik Tok (User Info) = c"
-    echo "Tik Tok (Download Video) = cd" 
+    echo "Tik Tok (Download Video) = cd"
+    echo "-----------------------------------------"
+    echo "Miscellaneous Settings: "
+    echo "Facebook Credentials = fbp"
+    echo ""
 }
 
 is_done() {
     echo ""
-    echo "Would you like to run another OSINT Scan? (y/n)" 
+    echo "Would you like to run another OSINT Scan?" 
     DONE2="false"
     while [ $DONE2 == "false" ];
     do
-        read input
+        read -p "Yes or No? [y/n]: " input
 
         case $input in
-        y)
+        y|Y|yes|Yes)
             read_choices
             DONE2="true"
             ;;
-        n)
+        n|N|no|No)
             DONE="true"
             DONE2="true"
             ;;
@@ -76,24 +93,29 @@ read_choices
 
 while [ "$DONE" == "false" ];
 do
-    read value
+    read -p "Enter Your Choice: " value
 
     case $value in
-    t)
+    t|Twitter|T|twitter)
         run_twitter
         python ./modules/twitter/twitter_module.py $handler
         is_done
         ;;
-    f)
+    f|F|Facebook|facebook)
         run_fb
-        $(cd /home/osint/Desktop/scrounger/modules/facebook && python3.7 scraper.py)
+        $(cd $DIR_LOC/modules/facebook && python3.7 scraper.py)
         wait
-        $(cd /home/osint/Desktop/scrounger/modules/facebook && cp -R data/. "/home/osint/Desktop/OSINT_OUTPUT/Facebook")
+        $(cd $DIR_LOC/modules/facebook && cp -R data/. "/home/osint/Desktop/OSINT_OUTPUT/Facebook")
         wait
-        $(cd /home/osint/Desktop/scrounger/modules/facebook/data && rm -rf *)
+        $(cd $DIR_LOC/modules/facebook/data && rm -rf *)
         is_done
         ;;
-    c)
+    fbp|FBP)
+        set_fb_pass
+        wait
+        is_done
+        ;;
+    c|TikTok|tiktok|C|"Tik ToK"|"tik tok")
         mkdir -p "/home/osint/Desktop/OSINT_OUTPUT/TikTok/UserProfiles"
         run_tiktok
         python3.7 ./modules/tiktok_user_info/tiktok_module.py --username "$handler"
@@ -103,7 +125,7 @@ do
         rm -rf "@$handler"
         is_done
         ;;
-    cd)
+    cd|CD)
         python3.7 ./modules/tiktok/run.py
         wait
         cp -R "videos/" "/home/osint/Desktop/OSINT_OUTPUT/TikTok"
