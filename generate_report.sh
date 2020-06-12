@@ -12,7 +12,7 @@ mkdir -p "/home/osint/Desktop/OSINT_REPORTS/Report_$DATE"
 FILENAME="/home/osint/Desktop/OSINT_REPORTS/Report_$DATE/Report_$DATE.csv"
 FILENAME_HASH="/home/osint/Desktop/OSINT_REPORTS/Report_$DATE/Report_Hash.txt"
 
-printf "Name\tPath\tDate_Modified\tMD5_Hash\n" >> $FILENAME
+printf "Name\tPath\tDate_Analyzed\tMD5_Hash\n" >> $FILENAME
 echo "Generating Report_$DATE.csv..."
 
 ############################################################
